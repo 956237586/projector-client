@@ -56,8 +56,8 @@ class WebWindowManager(private val stateMachine: ClientStateMachine, override va
 
   // todo: remove SUPPRESS after KT-8112 is implemented or KTIJ-15401 is solved in some other way
   private fun onDeactivated(@Suppress("UNUSED_PARAMETER") event: FocusEvent) {
-    val windowIds = visibleWindows.map { it.id }
-    stateMachine.fire(ClientAction.AddEvent(ClientWindowsDeactivationEvent(windowIds)))
+    // val windowIds = visibleWindows.map { it.id }
+    // stateMachine.fire(ClientAction.AddEvent(ClientWindowsDeactivationEvent(windowIds)))
   }
 
   private val windows = mutableMapOf<Int, WebWindow>()
