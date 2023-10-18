@@ -35,7 +35,9 @@ internal object IjInjector {
     val isAgent: Boolean,
     val markdownPanelClassName: String,
     val isIdeAttached: Boolean,
-  )
+  ){
+     val jcefTransformerInUse by lazy { isIdeAttached }
+  }
 
   private fun parametersFromArgs(args: Map<String, String>): AgentParameters {
 
@@ -51,6 +53,7 @@ internal object IjInjector {
     val parameters = parametersFromArgs(args)
 
     // TODO: support same transformers in agent mode too to reach feature parity
+    // TODO JCEF & Markdown 不支持时,查看这里对应的类加载器
     val transformers = listOf(
       IjAwtTransformer,
       IjLigaturesDisablerTransformer,
@@ -60,7 +63,6 @@ internal object IjInjector {
       IjFastNodeCellRendererTransformer,
       IjRestartDisablerTransformer,
     )
-
     ProjectorBatchTransformer(transformers).runTransformations(instrumentation, parameters)
   }
 }

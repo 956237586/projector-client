@@ -24,7 +24,7 @@
 package org.jetbrains.projector.util.loading.state
 
 import com.intellij.diagnostic.LoadingState
-import com.intellij.ide.WindowsCommandLineProcessor
+import com.intellij.diagnostic.StartUpMeasurer
 import org.jetbrains.projector.util.loading.ProjectorClassLoaderSetup
 import org.jetbrains.projector.util.loading.UseProjectorLoader
 import org.jetbrains.projector.util.loading.getOption
@@ -69,16 +69,18 @@ public enum class IdeState {
         false -> false
 
         true -> try {
-          WindowsCommandLineProcessor.ourMainRunnerClass
+          // TODO 更好的判断IDE是否启动起来 原 WindowsCommandLineProcessor.ourMainRunnerClass
+          StartUpMeasurer.isEnabled()
           true
         }
         catch (t: Throwable) {
+          t.printStackTrace()
           false
         }
       }
 
     private val isIdeClassLoaderInstantiated: Boolean
-      get() = isIdeAttached && WindowsCommandLineProcessor.ourMainRunnerClass != null
+      get() = isIdeAttached
 
     public val attachToIde: Boolean get() = getOption(ATTACH_TO_IDE_PROPERTY_NAME, "true").toBooleanStrict()
 

@@ -47,6 +47,7 @@ internal class ProjectorBatchTransformer(transformerSetups: List<IdeTransformerS
     val groups = transformerSetups.groupBy { it.loadingState }.toMutableMap()
 
     fun runForState(state: IdeState?): Boolean {
+      logger.info { "runForState state:$state" }
       val transformers = groups[state] ?: return groups.isEmpty()
       transformers.forEach { it.runTransformations(instrumentation, parameters, canRetransform) }
       logResults(state)
@@ -56,16 +57,17 @@ internal class ProjectorBatchTransformer(transformerSetups: List<IdeTransformerS
 
     runForState(null)
 
+    logger.info { "runTransformations registerStateListener start" }
     if (!parameters.isIdeAttached) {
       return
     }
-
     val requiredStates = groups.keys.filterNotNullTo(mutableSetOf())
     registerStateListener("run transformations", IdeStateListener(requiredStates, ::runForState))
+    logger.info { "runTransformations registerStateListener end" }
   }
 
   private fun logResults(state: IdeState?) {
-    logResults("(State: ${state?.name ?: "Initial"})")
+    logResults("logResults State: ${state?.name ?: "Initial"})")
     results.clear()
   }
 

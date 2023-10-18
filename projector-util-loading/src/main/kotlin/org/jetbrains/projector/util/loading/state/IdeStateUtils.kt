@@ -68,6 +68,8 @@ public fun registerStateListener(purpose: String?, listener: IdeStateListener) {
     return
   }
 
+  logger.info { "registerStateListener start" }
+
   scope.launch { runLoopForListener(purpose, listener) }
 }
 

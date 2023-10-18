@@ -23,7 +23,6 @@
  */
 package org.jetbrains.projector.util.loading
 
-import com.intellij.ide.WindowsCommandLineProcessor
 import org.jetbrains.projector.util.loading.state.IdeState
 import org.jetbrains.projector.util.loading.state.whenOccurred
 import java.lang.reflect.Method
@@ -49,7 +48,9 @@ public object ProjectorClassLoaderSetup {
     prjClassLoader.forceLoadByProjectorClassLoader("org.jetbrains.projector.server.core.ij.md.ProjectorMarkdownPanel")
 
     val onIdeClassloaderInstantiated = Runnable {
-      prjClassLoader.ideaClassLoader = WindowsCommandLineProcessor.ourMainRunnerClass.classLoader
+      // TODO 获取到真正的类加载器
+      //prjClassLoader.ideaClassLoader = WindowsCommandLineProcessor.ourMainRunnerClass.classLoader
+      //prjClassLoader.ideaClassLoader = AppMode::class.java.classLoader
       ideaClassLoaderInitialized = true
     }
 
