@@ -30,4 +30,4 @@ jobs:
       - name: Clean
         run: ./gradlew clean
       - name: Publish to space
-        run: ./gradlew :projector-${{ matrix.modules }}:publish -PpublishingVersion=${{ steps.tag_name.outputs.SOURCE_TAG }} -PmavenUsername=${{ secrets.SPACE_NAME }} -PmavenPassword=${{ secrets.SPACE_TOKEN }}
+        run: ./gradlew :projector-${{ matrix.modules }}:publish -PmavenUsername=${{ secrets.SPACE_NAME }} -PmavenPassword=${{ secrets.SPACE_TOKEN }}

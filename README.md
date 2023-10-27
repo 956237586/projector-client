@@ -24,6 +24,9 @@ To learn more about modules, check out README files inside them:
 * [projector-client-common](projector-client-common/README.md).
 * [projector-client-web](projector-client-web/README.md).
 * [projector-launcher](projector-launcher/README.md).
-
+## Public to Maven
+```
+./gradlew :projector-common:publish :projector-server-core:publish :projector-util-loading:publish :projector-util-logging:publish
+```
 ## License
 [MIT](LICENSE.txt).
