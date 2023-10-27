@@ -28,5 +28,7 @@ To learn more about modules, check out README files inside them:
 ```
 ./gradlew :projector-common:publish :projector-server-core:publish :projector-util-loading:publish :projector-util-logging:publish
 ```
+## Qcloud coding packages
+[https://a956237586.coding.net/public-artifacts/hylstudio/projector-client/packages](https://a956237586.coding.net/public-artifacts/hylstudio/projector-client/packages)
 ## License
 [MIT](LICENSE.txt).
