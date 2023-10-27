@@ -47,7 +47,8 @@ public fun Project.publishToSpace(fromComponent: String) {
       }
     }
     repositories {
-      maven("https://packages.aliyun.com/maven/repository/2425368-release-jMTt8f/") {
+      // maven("https://packages.aliyun.com/maven/repository/2425368-release-jMTt8f/") {
+      maven("https://a956237586-maven.pkg.coding.net/repository/hylstudio/projector-client/") {
         credentials(PasswordCredentials::class)
       }
     }
