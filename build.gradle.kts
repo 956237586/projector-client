@@ -36,7 +36,7 @@ val targetJvm: String by project
 val publishingVersion: String by project
 
 subprojects {
-  group = "org.jetbrains.projector"
+  group = "cn.hylstudio.skykoma.projector-client"
   version = publishingVersion
 
   repositories {

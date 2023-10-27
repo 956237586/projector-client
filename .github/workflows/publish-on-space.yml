@@ -3,7 +3,8 @@ name: Publish on Space
 on:
   push:
     branches: [ master, publish_* ]
-
+    tags:
+      - "v*"
 jobs:
   publish:
     name: publish on space
@@ -19,6 +20,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '11'
+      - name: Tag name  # Inspired from https://github.community/t/how-to-get-just-the-tag-name/16241/11
+        id: tag_name
+        run: echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
       - name: Add properties
         run: |
           echo -n publishingVersion= >> gradle.properties
@@ -26,4 +30,4 @@ jobs:
       - name: Clean
         run: ./gradlew clean
       - name: Publish to space
-        run: ./gradlew :projector-${{ matrix.modules }}:publish -PmavenUsername=${{ secrets.SPACE_NAME }} -PmavenPassword=${{ secrets.SPACE_TOKEN }}
+        run: ./gradlew :projector-${{ matrix.modules }}:publish -PpublishingVersion=${{ steps.tag_name.outputs.SOURCE_TAG }} -PmavenUsername=${{ secrets.SPACE_NAME }} -PmavenPassword=${{ secrets.SPACE_TOKEN }}

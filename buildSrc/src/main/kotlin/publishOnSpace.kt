@@ -34,11 +34,11 @@ public fun Project.publishToSpace(fromComponent: String) {
       publications {
         create<MavenPublication>("maven") {
           pom {
-            url.set("https://github.com/JetBrains/projector-client")
+            url.set("https://github.com/956237586/projector-client")
             licenses {
               license {
                 name.set("MIT Licence")
-                url.set("https://github.com/JetBrains/projector-client/blob/master/LICENSE.txt")
+                url.set("https://github.com/956237586/projector-client/blob/master/LICENSE.txt")
               }
             }
           }
@@ -47,7 +47,7 @@ public fun Project.publishToSpace(fromComponent: String) {
       }
     }
     repositories {
-      maven("https://packages.jetbrains.team/maven/p/ij/intellij-dependencies") {
+      maven("https://packages.aliyun.com/maven/repository/2425368-release-jMTt8f/") {
         credentials(PasswordCredentials::class)
       }
     }
