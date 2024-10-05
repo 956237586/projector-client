@@ -71,7 +71,7 @@ object OnScreenMessenger : LafListener {
           let token = document.getElementById("customToken").value;
           let searchParams = new URLSearchParams(location.search);
           searchParams.set("token", token);
-          let url = `${location.protocol}//${location.host}${location.pathname}?${searchParams.toString()}`;
+          let url = `${'$'}{location.protocol}//${'$'}{location.host}${'$'}{location.pathname}?${'$'}{searchParams.toString()}`;
           console.log("reconnect with token", token);
           location.href = url;
           return false;
