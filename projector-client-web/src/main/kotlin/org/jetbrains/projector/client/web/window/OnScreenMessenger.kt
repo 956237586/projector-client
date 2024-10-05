@@ -63,23 +63,24 @@ object OnScreenMessenger : LafListener {
   }
 
   private val reload = (document.createElement("div") as HTMLDivElement).apply {
-    if(text.contains("Reason: Bad handshake token")){
-      innerHTML = """
-      <p>If you wish, you can reconnect with token: 
-      <input id='customToken' type='text'/>
-      <a href='' onclick='
-          let token = document.getElementById("customToken").value;
-          let searchParams = new URLSearchParams(location.search);
-          searchParams.set("token", token);
-          let url = `${'$'}{location.protocol}//${'$'}{location.host}${'$'}{location.pathname}?${'$'}{searchParams.toString()}`;
-          console.log("reconnect with token", token);
-          location.href = url;
-          return false;
-      '>Submit</a></p>
-  """.trimIndent()
-    } else {
-      innerHTML = "<p>If you wish, you can try to <a onclick='location.reload();' href=''>reconnect</a>.</p>"
-    }
+    innerHTML = "<p>If you wish, you can try to <a onclick='location.reload();' href=''>reconnect</a>.</p>"
+    div.appendChild(this)
+  }
+
+  private val reloadWithToken  = (document.createElement("div") as HTMLDivElement).apply {
+    innerHTML = """
+    <p>If you wish, you can reconnect with token: 
+    <input id='customToken' type='text'/>
+    <a href='' onclick='
+        let token = document.getElementById("customToken").value;
+        let searchParams = new URLSearchParams(location.search);
+        searchParams.set("token", token);
+        let url = `${'$'}{location.protocol}//${'$'}{location.host}${'$'}{location.pathname}?${'$'}{searchParams.toString()}`;
+        console.log("reconnect with token", token);
+        location.href = url;
+        return false;
+    '>Submit</a></p>
+""".trimIndent()
     div.appendChild(this)
   }
 
@@ -92,8 +93,11 @@ object OnScreenMessenger : LafListener {
 
     header.title = title
     text.innerText = content
-
-    reload.style.display = canReload.toDisplayType()
+    var reloadDiv = reload
+    if (content.contains("Reason: Bad handshake token")) {
+      reloadDiv = reloadWithToken
+    }
+    reloadDiv.style.display = canReload.toDisplayType()
 
     if (div.parentElement == null) {
       document.body!!.appendChild(div)
