@@ -63,8 +63,23 @@ object OnScreenMessenger : LafListener {
   }
 
   private val reload = (document.createElement("div") as HTMLDivElement).apply {
-    innerHTML = "<p>If you wish, you can try to <a onclick='location.reload();' href=''>reconnect</a>.</p>"
-
+    if(text.contains("Reason: Bad handshake token")){
+      innerHTML = """
+      <p>If you wish, you can reconnect with token: 
+      <input id='customToken' type='text'/>
+      <a href='' onclick='
+          let token = document.getElementById("customToken").value;
+          let searchParams = new URLSearchParams(location.search);
+          searchParams.set("token", token);
+          let url = `${location.protocol}//${location.host}${location.pathname}?${searchParams.toString()}`;
+          console.log("reconnect with token", token);
+          location.href = url;
+          return false;
+      '>Submit</a></p>
+  """.trimIndent()
+    } else {
+      innerHTML = "<p>If you wish, you can try to <a onclick='location.reload();' href=''>reconnect</a>.</p>"
+    }
     div.appendChild(this)
   }
 

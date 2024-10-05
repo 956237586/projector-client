@@ -34,10 +34,12 @@
   <link href="manifest.webmanifest" rel="manifest">
   <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="192x192" >
 
-  <script src="https://cdn.bootcss.com/pako/2.0.4/pako.min.js"></script>
+  <!-- <script src="https://cdn.bootcss.com/pako/2.0.4/pako.min.js"></script> -->
+  <script src="./pako.min.js"></script>
   <script>
     async function loadBrotli() {
-      let brotli = await import("https://unpkg.com/brotli-wasm@2.0.0/index.web.js?module").then(m => m.default);
+      // let brotli = await import("https://unpkg.com/brotli-wasm@2.0.0/index.web.js?module").then(m => m.default);
+      let brotli = await import("./brotli-wasm/index.web.js").then(m => m.default);
       window.brotli = (data) => {
         const decompressedData = brotli.decompress(new Uint8Array(data.buffer));
         return new Int8Array(decompressedData.buffer)
