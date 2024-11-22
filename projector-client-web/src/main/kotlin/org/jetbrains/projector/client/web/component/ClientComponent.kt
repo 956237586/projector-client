@@ -29,20 +29,21 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventListener
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.events.MouseEventInit
+import org.w3c.dom.events.EventListener
 
 abstract class ClientComponent(
   protected val id: Int,
   private val onMouseMove: (Event) -> Unit,
 ) {
 
-  private val contentDocumentListeners = mutableMapOf<String, EventListener>()
+  private val documentListeners = mutableMapOf<String, EventListener>()
 
   val iFrame: HTMLIFrameElement = createIFrame(id)
 
   var windowId: Int? = null
 
   fun dispose() {
-    contentDocumentListeners.forEach { iFrame.contentDocument?.removeEventListener(it.key, it.value) }
+    documentListeners.forEach { iFrame.contentDocument?.removeEventListener(it.key, it.value) }
     iFrame.remove()
   }
 
@@ -69,9 +70,17 @@ abstract class ClientComponent(
 
     contentDocument!!.oncontextmenu = { false }
 
-    addEventListener("load", EventListener {
+    documentListeners["load"] = EventListener {
       onContentChanged()
-    })
+    }
+    documentListeners["mousedown"] = EventListener {
+      style.asDynamic().pointerEvents = "none"
+    }
+    documentListeners["mouseup"] = EventListener {
+      style.asDynamic().pointerEvents = "auto"
+    }
+
+    documentListeners.forEach { document.addEventListener(it.key, it.value) }
   }
 
   protected fun setLinkProcessor(linkProcessor: (String) -> Unit) {
@@ -105,13 +114,13 @@ abstract class ClientComponent(
   }
 
   private fun onContentChanged() {
-    contentDocumentListeners.forEach { iFrame.contentDocument!!.addEventListener(it.key, it.value) }
+    documentListeners.forEach { iFrame.contentDocument!!.addEventListener(it.key, it.value) }
   }
 
   private fun getIFrameId(browserId: Int) = "${this::class.simpleName}$browserId"
 
   init {
-    contentDocumentListeners["mousemove"] = EventListener {
+    documentListeners["mousemove"] = EventListener {
 
       val mouseEventInit = with(it as MouseEvent) {
         MouseEventInit(
