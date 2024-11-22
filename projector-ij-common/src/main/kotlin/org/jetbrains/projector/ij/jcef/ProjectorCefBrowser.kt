@@ -26,6 +26,7 @@ package org.jetbrains.projector.ij.jcef
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.cef.browser.CefFrame
+import org.cef.browser.CefRequestContext
 import org.cef.callback.*
 import org.cef.handler.*
 import org.cef.misc.CefPdfPrintSettings
@@ -185,6 +186,9 @@ public class ProjectorCefBrowser @JvmOverloads constructor(
   }
 
   override fun getClient(): CefClient = cefClient
+  override fun getRequestContext(): CefRequestContext {
+    return originalBrowser?.requestContext?: TODO("Not yet implemented")
+  }
 
   override fun getRenderHandler(): CefRenderHandler {
     return originalBrowser?.renderHandler ?: TODO("Not yet implemented")
@@ -450,6 +454,14 @@ public class ProjectorCefBrowser @JvmOverloads constructor(
     originalBrowser?.onBeforeClose()
   }
 
+  override fun isClosing(): Boolean {
+    return originalBrowser?.isClosing?: TODO("Not yet implemented")
+  }
+
+  override fun isClosed(): Boolean {
+    return originalBrowser?.isClosed?: TODO("Not yet implemented")
+  }
+
   override fun setFocus(enable: Boolean) {
     originalBrowser?.setFocus(enable)
   }
@@ -466,16 +478,13 @@ public class ProjectorCefBrowser @JvmOverloads constructor(
     originalBrowser?.zoomLevel = zoomLevel
   }
 
-  override fun runFileDialog(
-    mode: CefDialogHandler.FileDialogMode?,
-    title: String?,
-    defaultFilePath: String?,
-    acceptFilters: Vector<String>?,
-    selectedAcceptFilter: Int,
-    callback: CefRunFileDialogCallback?,
-  ) {
-    originalBrowser?.runFileDialog(mode, title, defaultFilePath, acceptFilters, selectedAcceptFilter, callback)
-  }
+   override fun runFileDialog(mode: CefDialogHandler.FileDialogMode?,
+                                     title: String?,
+                                     defaultFilePath: String?,
+                                     acceptFilters: Vector<String>?,
+                                     callback: CefRunFileDialogCallback?) {
+     originalBrowser?.runFileDialog(mode, title, defaultFilePath, acceptFilters, callback)
+   }
 
   override fun startDownload(url: String?) {
     originalBrowser?.startDownload(url)
@@ -489,8 +498,8 @@ public class ProjectorCefBrowser @JvmOverloads constructor(
     originalBrowser?.printToPDF(path, settings, callback)
   }
 
-  override fun find(identifier: Int, searchText: String?, forward: Boolean, matchCase: Boolean, findNext: Boolean) {
-    originalBrowser?.find(identifier, searchText, forward, matchCase, findNext)
+  override fun find(searchText: String?, forward: Boolean, matchCase: Boolean, findNext: Boolean) {
+    originalBrowser?.find(searchText, forward, matchCase, findNext)
   }
 
   override fun stopFinding(clearSelection: Boolean) {
@@ -511,6 +520,10 @@ public class ProjectorCefBrowser @JvmOverloads constructor(
 
   override fun wasResized(width: Int, height: Int) {
     originalBrowser?.wasResized(width, height)
+  }
+
+  override fun notifyScreenInfoChanged() {
+    originalBrowser?.notifyScreenInfoChanged()
   }
 
   override fun sendKeyEvent(e: KeyEvent?) {

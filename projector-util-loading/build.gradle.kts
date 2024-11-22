@@ -51,7 +51,7 @@ dependencies {
 
   compileOnly("com.jetbrains.intellij.platform:bootstrap:$intellijPlatformVersion")
 
-  if (intellijPlatformBuildNumber >= BuildNumber.fromString("213.6461.77")!!) {
+  if (intellijPlatformBuildNumber >= BuildNumber.fromString("213.5744.223")!!) {
     compileOnly("com.jetbrains.intellij.platform:util-base:$intellijPlatformVersion")
   } else {
     compileOnly("com.jetbrains.intellij.platform:util-diagnostic:$intellijPlatformVersion")
