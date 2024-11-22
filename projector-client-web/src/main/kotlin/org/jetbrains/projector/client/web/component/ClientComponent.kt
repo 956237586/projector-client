@@ -29,7 +29,6 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventListener
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.events.MouseEventInit
-import org.w3c.dom.events.EventListener
 
 abstract class ClientComponent(
   protected val id: Int,
