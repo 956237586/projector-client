@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019-2023 JetBrains s.r.o.
+ * Copyright (c) 2019-2022 JetBrains s.r.o.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.jetbrains.projector.client.web.state
+package org.jetbrains.projector.ij.jcef
 
-import org.jetbrains.projector.client.web.WindowSizeController
-import org.jetbrains.projector.common.protocol.toServer.ClientEvent
+internal data class BrowserState(
+  val html: String,
+  val executedJs: List<JsCode>,
+  val openInExternalBrowser: Boolean,
+  val externalUrl: String,
+)
 
-@JsExport
-sealed class ClientAction {
-
-  class Start(
-    val stateMachine: ClientStateMachine,
-    val url: String,
-    val windowSizeController: WindowSizeController,
-  ) : ClientAction()
-
-  sealed class WebSocket : ClientAction() {
-
-    class Open(val openingTimeStamp: Int) : WebSocket()
-    class Message(val message: ByteArray) : WebSocket()
-    class Close(val wasClean: Boolean, val code: Short, val reason: String) : WebSocket()
-    class NoReplies(val elapsedTimeMs: Int) : WebSocket()
-  }
-
-  class AddEvent(val event: ClientEvent) : ClientAction()
-
-  object Flush : ClientAction()
-
-  object LoadAllFonts : ClientAction()
-
-  object WindowResize : ClientAction()
-}
+internal data class JsCode(
+  val code: String,
+  val url: String? = null,
+  val line: Int = 0,
+)

@@ -24,6 +24,7 @@
 package org.jetbrains.projector.agent.ijInjector
 
 import org.jetbrains.projector.agent.init.IjArgs
+import org.jetbrains.projector.ij.jcef.isCefAvailable
 import org.jetbrains.projector.util.loading.UseProjectorLoader
 import java.lang.instrument.Instrumentation
 
@@ -37,6 +38,7 @@ internal object IjInjector {
     val isIdeAttached: Boolean,
   ){
      val jcefTransformerInUse by lazy { isIdeAttached }
+    // val jcefTransformerInUse by lazy { isCefAvailable() }
   }
 
   private fun parametersFromArgs(args: Map<String, String>): AgentParameters {
@@ -58,6 +60,7 @@ internal object IjInjector {
       IjAwtTransformer,
       IjLigaturesDisablerTransformer,
       IjMdTransformer,
+      IjJcefTransformer,
       IjBrowserUtilTransformer,
       IjUiUtilsTransformer,
       IjFastNodeCellRendererTransformer,

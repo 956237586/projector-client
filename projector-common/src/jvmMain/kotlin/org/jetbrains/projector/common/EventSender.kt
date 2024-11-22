@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019-2023 JetBrains s.r.o.
+ * Copyright (c) 2019-2022 JetBrains s.r.o.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.jetbrains.projector.client.web.state
+package org.jetbrains.projector.common
 
-import org.jetbrains.projector.client.web.WindowSizeController
-import org.jetbrains.projector.common.protocol.toServer.ClientEvent
+import org.jetbrains.projector.common.event.ServerEventPart
+import org.jetbrains.projector.common.protocol.toClient.ServerEvent
+import org.jetbrains.projector.util.loading.ProjectorClassLoader
+import java.util.*
 
-@JsExport
-sealed class ClientAction {
+interface EventSender {
 
-  class Start(
-    val stateMachine: ClientStateMachine,
-    val url: String,
-    val windowSizeController: WindowSizeController,
-  ) : ClientAction()
+  fun sendEvent(event: ServerEvent)
 
-  sealed class WebSocket : ClientAction() {
+  fun sendEventPart(part: ServerEventPart)
 
-    class Open(val openingTimeStamp: Int) : WebSocket()
-    class Message(val message: ByteArray) : WebSocket()
-    class Close(val wasClean: Boolean, val code: Short, val reason: String) : WebSocket()
-    class NoReplies(val elapsedTimeMs: Int) : WebSocket()
+  companion object {
+
+    val instance: EventSender by lazy {
+      // Use ProjectorClassLoader because ProjectorServer is instantiated by it and in CommonQueueEvenSender we access server
+      ServiceLoader.load(EventSender::class.java, ProjectorClassLoader.instance).findFirst().orElseThrow()
+    }
   }
-
-  class AddEvent(val event: ClientEvent) : ClientAction()
-
-  object Flush : ClientAction()
-
-  object LoadAllFonts : ClientAction()
-
-  object WindowResize : ClientAction()
 }
