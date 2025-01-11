@@ -348,26 +348,25 @@ internal object IjJcefTransformer : IdeTransformerSetup<IjInjector.AgentParamete
         // Mocking a fake CefVersion avoid this NPE
         // com/intellij/ui/jcef/JBCefApp.java:209
         //    LOG.info(String.format("jcef version: %s | cmd args: %s", myCefApp.getVersion().getJcefVersion(), Arrays.toString(args)));
-            Class<?> cefVersionClass = Class.forName("org.cef.CefApp${'$'}CefVersion");
+          java.lang.Class<?> cefVersionClass = java.lang.Class.forName("org.cef.CefApp${'$'}CefVersion");
 
-            // 获取构造函数，并设置其可访问
-            java.lang.reflect.Constructor<?> constructor = cefVersionClass.getDeclaredConstructor(
-                int.class, int.class, int.class, int.class, int.class, int.class,
-                int.class, int.class, int.class, int.class);
-            constructor.setAccessible(true);
-
-            // 通过构造函数创建 CefVersion 实例
-            return constructor.newInstance(
-                1, // JCEF_COMMIT_NUMBER
-                1, // CEF_VERSION_MAJOR
-                1, // CEF_VERSION_MINOR
-                1, // CEF_VERSION_PATCH
-                1, // CEF_COMMIT_NUMBER
-                1, // CHROME_VERSION_MAJOR
-                1, // CHROME_VERSION_MINOR
-                1, // CHROME_VERSION_BUILD
-                1  // CHROME_VERSION_PATCH
-            );
+          // 获取构造函数，并设置其可访问
+          java.lang.reflect.Constructor<?> constructor = cefVersionClass.getDeclaredConstructor(
+              int.class, int.class, int.class, int.class, int.class, int.class,
+              int.class, int.class, int.class, int.class);
+          constructor.setAccessible(true);
+          // 通过构造函数创建 CefVersion 实例
+          return constructor.newInstance(
+              1, // JCEF_COMMIT_NUMBER
+              1, // CEF_VERSION_MAJOR
+              1, // CEF_VERSION_MINOR
+              1, // CEF_VERSION_PATCH
+              1, // CEF_COMMIT_NUMBER
+              1, // CHROME_VERSION_MAJOR
+              1, // CHROME_VERSION_MINOR
+              1, // CHROME_VERSION_BUILD
+              1  // CHROME_VERSION_PATCH
+          );
           }
         """.trimIndent()
       )

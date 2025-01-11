@@ -137,6 +137,7 @@ public interface TransformerSetup<Params> {
           println("redefine class ${key} success")
         } catch (e: Exception) {
           println("redefine class ${key} failed, error : ${e.message}")
+          e.printStackTrace()
         }
       }
     }
