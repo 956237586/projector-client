@@ -129,7 +129,16 @@ public interface TransformerSetup<Params> {
 
       val pool = ClassPool().apply { appendClassPath(LoaderClassPath(loader)) }
 
-      redefineClasses(*transformations.map { ClassDefinition(it.key, it.value(pool[it.key.name])) }.toTypedArray())
+//      redefineClasses(*transformations.map { ClassDefinition(it.key, it.value(pool[it.key.name])) }.toTypedArray())
+      transformations.forEach { (key, transformation) ->
+        try {
+          val classDefinition = ClassDefinition(key, transformation(pool[key.name]))
+          redefineClasses(classDefinition)
+          println("redefine class ${key} success")
+        } catch (e: Exception) {
+          println("redefine class ${key} failed, error : ${e.message}")
+        }
+      }
     }
   }
 }
