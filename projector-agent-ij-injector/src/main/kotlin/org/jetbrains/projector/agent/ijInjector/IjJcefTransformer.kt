@@ -324,7 +324,6 @@ internal object IjJcefTransformer : IdeTransformerSetup<IjInjector.AgentParamete
       .setBodyIfHeadless(
         """
           {
-            System.out.println("transformer fake result true");
             return true;
           }
         """.trimIndent()
@@ -351,7 +350,6 @@ internal object IjJcefTransformer : IdeTransformerSetup<IjInjector.AgentParamete
         //    LOG.info(String.format("jcef version: %s | cmd args: %s", myCefApp.getVersion().getJcefVersion(), Arrays.toString(args)));
         return new org.cef.CefApp.CefVersion(
             1,                             // JCEF_COMMIT_NUMBER
-            "111",                       // JCEF_COMMIT_HASH
             1,                                // CEF_VERSION_MAJOR
             1,                                 // CEF_VERSION_MINOR
             1,                                 // CEF_VERSION_PATCH
