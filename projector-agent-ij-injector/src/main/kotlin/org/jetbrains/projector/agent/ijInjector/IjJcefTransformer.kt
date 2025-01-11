@@ -52,7 +52,7 @@ internal object IjJcefTransformer : IdeTransformerSetup<IjInjector.AgentParamete
   ): Map<Class<*>, (CtClass) -> ByteArray?> {
 
     isAgent = parameters.isAgent
-
+    println("getTransformations jcef, isAgent = $isAgent")
     val transformations = mutableMapOf<Class<*>, (CtClass) -> ByteArray?>(
       CefApp::class.java to ::transformCefApp,
       CefBrowserFactory::class.java to ::transformCefBrowserFactory,
@@ -324,6 +324,7 @@ internal object IjJcefTransformer : IdeTransformerSetup<IjInjector.AgentParamete
       .setBodyIfHeadless(
         """
           {
+            System.out.println("transformer fake result true");
             return true;
           }
         """.trimIndent()
@@ -336,6 +337,30 @@ internal object IjJcefTransformer : IdeTransformerSetup<IjInjector.AgentParamete
         """
           {
             setState(org.cef.CefApp.CefAppState.INITIALIZED);
+          }
+        """.trimIndent()
+      )
+    clazz
+      .getDeclaredMethod("getVersion")
+      .setBodyIfHeadless(
+        // language=java prefix="class CefMessageRouter_N { public boolean addHandler(CefMessageRouterHandler $1, boolean $2)" suffix="}"
+        """
+          {
+        // Mocking a fake CefVersion avoid this NPE
+        // com/intellij/ui/jcef/JBCefApp.java:209
+        //    LOG.info(String.format("jcef version: %s | cmd args: %s", myCefApp.getVersion().getJcefVersion(), Arrays.toString(args)));
+        return new org.cef.CefApp.CefVersion(
+            1,                             // JCEF_COMMIT_NUMBER
+            "111",                       // JCEF_COMMIT_HASH
+            1,                                // CEF_VERSION_MAJOR
+            1,                                 // CEF_VERSION_MINOR
+            1,                                 // CEF_VERSION_PATCH
+            1,                             // CEF_COMMIT_NUMBER
+            1,                                // CHROME_VERSION_MAJOR
+            1,                                 // CHROME_VERSION_MINOR
+            1,                               // CHROME_VERSION_BUILD
+            1                                  // CHROME_VERSION_PATCH
+        );
           }
         """.trimIndent()
       )
