@@ -347,14 +347,19 @@ internal object IjJcefTransformer : IdeTransformerSetup<IjInjector.AgentParamete
       .setBodyIfHeadless(
         // language=java prefix="class CefApp { public final CefVersion getVersion()" suffix="}"
         """
-          {
-              java.lang.Class<?> cefVersionClass = java.lang.Class.forName("org.cef.CefApp${'$'}CefVersion");
-              java.lang.reflect.Constructor<?> constructor = cefVersionClass.getDeclaredConstructor(
-                  int.class, int.class, int.class, int.class, int.class, int.class,
-                  int.class, int.class, int.class, int.class);
-              constructor.setAccessible(true);
-              return constructor.newInstance(1,1,1,1,1,1,1,1,1);
-          }
+            {
+                try {
+                    java.lang.Class<?> cefVersionClass = java.lang.Class.forName("org.cef.CefApp${'$'}CefVersion");
+                    java.lang.reflect.Constructor<?> constructor = cefVersionClass.getDeclaredConstructor(
+                            int.class, int.class, int.class, int.class, int.class, int.class,
+                            int.class, int.class, int.class, int.class);
+                    constructor.setAccessible(true);
+                    return constructor.newInstance(1, 1, 1, 1, 1, 1, 1, 1, 1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
         """.trimIndent()
       )
 
