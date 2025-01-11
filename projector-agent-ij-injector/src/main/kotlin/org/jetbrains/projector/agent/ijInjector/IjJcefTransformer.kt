@@ -58,6 +58,7 @@ internal object IjJcefTransformer : IdeTransformerSetup<IjInjector.AgentParamete
       CefBrowserFactory::class.java to ::transformCefBrowserFactory,
       CefClientHandler::class.java to ::transformCefClientHandler,
       Class.forName("org.cef.browser.CefMessageRouter_N") to ::transformNativeCefMessageRouter,
+      JBCefApp::class.java to ::transformJBCefApp,
       JBCefClient::class.java to ::transformJBCefClient,
       JBCefJSQuery::class.java to ::transformJBCefJSQuery,
       Class.forName("com.intellij.ui.jcef.JBCefFileSchemeHandlerFactory") to ::transformJBSchemeHandlerFactory,
@@ -339,34 +340,22 @@ internal object IjJcefTransformer : IdeTransformerSetup<IjInjector.AgentParamete
           }
         """.trimIndent()
       )
-    // Mocking a fake CefVersion avoid this NPE
-    // com/intellij/ui/jcef/JBCefApp.java:209
-    //    LOG.info(String.format("jcef version: %s | cmd args: %s", myCefApp.getVersion().getJcefVersion(), Arrays.toString(args)));
-    clazz
-      .getDeclaredMethod("getVersion")
-      .setBodyIfHeadless(
-        // language=java prefix="class CefApp { public final CefVersion getVersion()" suffix="}"
-        """
-            {
-                try {
-                        java.lang.Class<org.cef.CefApp.CefVersion> cefVersionClass = (java.lang.Class<org.cef.CefApp.CefVersion>) java.lang.Class.forName("org.cef.CefApp${'$'}CefVersion");
-                        java.lang.reflect.Constructor<org.cef.CefApp.CefVersion> constructor = cefVersionClass.getDeclaredConstructor(
-                            org.cef.CefApp.class,
-                            int.class, int.class, int.class, int.class, int.class, int.class,
-                            int.class, int.class, int.class, int.class);
-                        constructor.setAccessible(true);
-                        return (org.cef.CefApp.CefVersion) constructor.newInstance(this, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                return null;
-            }
-        """.trimIndent()
-      )
-
     return clazz.toBytecode()
   }
 
+  private fun transformJBCefApp(clazz: CtClass): ByteArray {
+    clazz
+      .getDeclaredMethod("stateHasChanged")
+      .setBodyIfHeadless(
+        // language=java prefix="public final class JBCefApp { public void stateHasChanged(CefApp.CefAppState $1)" suffix="}"
+        """
+          {
+            return;
+          }
+        """.trimIndent()
+      )
+    return clazz.toBytecode()
+  }
   private fun transformNativeCefMessageRouter(clazz: CtClass): ByteArray {
 
     // javassist can't automatically box primitives..
