@@ -349,16 +349,16 @@ internal object IjJcefTransformer : IdeTransformerSetup<IjInjector.AgentParamete
         """
             {
                 try {
-                    java.lang.Class<?> cefVersionClass = java.lang.Class.forName("org.cef.CefApp${'$'}CefVersion");
-                    java.lang.reflect.Constructor<?> constructor = cefVersionClass.getDeclaredConstructor(
+                        java.lang.Class<org.cef.CefApp.CefVersion> cefVersionClass = (java.lang.Class<org.cef.CefApp.CefVersion>) java.lang.Class.forName("org.cef.CefApp${'$'}CefVersion");
+                        java.lang.reflect.Constructor<org.cef.CefApp.CefVersion> constructor = cefVersionClass.getDeclaredConstructor(
                             org.cef.CefApp.class,
                             int.class, int.class, int.class, int.class, int.class, int.class,
                             int.class, int.class, int.class, int.class);
-                    constructor.setAccessible(true);
-                    return (CefApp.CefVersion) constructor.newInstance(this, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                        constructor.setAccessible(true);
+                        return (org.cef.CefApp.CefVersion) constructor.newInstance(this, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 return null;
             }
         """.trimIndent()
